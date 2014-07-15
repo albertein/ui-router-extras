@@ -116,7 +116,7 @@ describe('stickyState', function () {
     function getNestedStickyStates() {
       var newStates = {};
       newStates['aside'] = {};
-      newStates['A'] = {sticky: true, deepStateRedirect: true, views: { 'A@': {} }};
+      newStates['A'] =    {sticky: true, deepStateRedirect: true, views: { 'A@': {} }};
 
       newStates['A._1'] = {sticky: true, deepStateRedirect: true, views: { '_1@A': {} }};
       newStates['A._2'] = {sticky: true, deepStateRedirect: true, views: { '_2@A': {} }};
@@ -134,7 +134,6 @@ describe('stickyState', function () {
     }
 
     it ('should inactivate sticky state tabs_tab1 when transitioning back to A', function () {
-      var transitions = new TransitionAudit();
       testGo('aside', { entered: ['aside'] });
       testGo('A._1.__1.B.___1', { exited: ['aside'],                entered: pathFrom('A', 'A._1.__1.B.___1') });
       testGo('A._1.__1.B.___2', { inactivated: ['A._1.__1.B.___1'], entered:     ['A._1.__1.B.___2'] });
@@ -144,7 +143,7 @@ describe('stickyState', function () {
       testGo('aside', { entered: ['aside']});
       testGo('A._1.__1', { exited: ['aside'],                         entered: pathFrom('A', 'A._1.__1') });
       testGo('A._2.__2', { inactivated: pathFrom('A._1.__1', 'A._1'), entered: pathFrom('A._2', 'A._2.__2') });
-      testGo('aside', { inactivated: pathFrom('A._2.__2', 'A') ,      entered: ['aside'] });
+      testGo('aside',    { inactivated: pathFrom('A._2.__2', 'A') ,   entered: ['aside'] });
       testGo('A._2', { exited: ['aside'],                             reactivated: pathFrom('A', 'A._2.__2') }, { redirect: 'A._2.__2' });
       resetTransitionLog();
       testGo('A._1', { inactivated: pathFrom('A._2.__2', 'A._2'), reactivated: pathFrom('A._1', 'A._1.__1') }, { redirect: 'A._1.__1' });
@@ -156,7 +155,6 @@ describe('stickyState+ui-sref-active', function () {
   var document;
 
   beforeEach(module('ct.ui.router.extras', function($stickyStateProvider, $stateProvider) {
-    "use strict";
     // Load and capture $stickyStateProvider and $stateProvider
     _stickyStateProvider = $stickyStateProvider;
     _stateProvider = $stateProvider;

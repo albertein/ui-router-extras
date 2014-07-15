@@ -138,7 +138,7 @@ function testGo(state, tAdditional, options) {
 
   var root = $state.$current.path[0].parent;
   var __inactives = root.parent;
-  var __inactiveViews = _.without(_.keys(__inactives.locals), "resolve", "globals");
+  var __inactiveViews = _.keys(__inactives.locals);
   var extra = _.difference(__inactiveViews, tLog.views);
   var missing = _.difference(tLog.views, __inactiveViews);
   
