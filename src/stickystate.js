@@ -1,3 +1,49 @@
+/**
+ * Sticky States makes entire state trees "sticky". Sticky state trees are retained until their parent state is
+ * exited. This can be useful to allow multiple modules, peers to each other, each module having its own independent
+ * state tree.  The peer modules can be activated and inactivated without any loss of their internal context, including
+ * DOM content such as unvalidated/partially filled in forms, and even scroll position.
+ *
+ * DOM content is retained by declaring a named ui-view in the parent state, and filling it in with a named view from the
+ * sticky state.
+ *
+ * Technical overview:
+ *
+ * ---PATHS---
+ * UI-Router uses state paths to manage entering and exiting of individual states.  Each state "A.B.C.X" has its own path, starting
+ * from the root state ("") and ending at the state "X".  The path is composed the final state "X"'s ancestors, e.g.,
+ * [ "", "A", "B", "C", "X" ].
+ *
+ * When a transition is processed, the previous path (fromState.path) is compared with the requested destination path
+ * (toState.path).  All states that the from and to paths have in common are "kept" during the transition.  The last
+ * "kept" element in the path is the "pivot".
+ *
+ * ---VIEWS---
+ * A View in UI-Router consists of a controller and a template.  Each view belongs to one state, and a state can have many
+ * views.  Each view plugs into a ui-view element in the DOM of one of the parent state's view(s).
+ *
+ * View context is managed in UI-Router using a 'state locals' concept. When a state's views are fully loaded, those views
+ * are placed on the states 'locals' object.  Each locals object prototypally inherits from its parent state's locals object.
+ * This means that state "A.B.C.X"'s locals object also has all of state "A.B.C"'s locals as well as those from "A.B" and "A".
+ * The root state ("") defines no views, but it is included in the protypal inheritance chain.
+ *
+ * The locals object is used by the ui-view directive to load the template, render the content, create the child scope,
+ * initialize the controller, etc.  The ui-view directives caches the locals in a closure variable.  If the locals are
+ * identical (===), then the ui-view directive exits early, and does no rendering.
+ *
+ * In stock UI-Router, when a state is exited, that state's locals object is deleted and those views are cleaned up by
+ * the ui-view directive shortly.
+ *
+ * ---Sticky States---
+ * UI-Router Extras keeps views for inactive states live, even when UI-Router thinks it has exited them.  It does this
+ * by creating a pseudo state called "__inactives" that is the parent of the root state.  It also then defines a locals
+ * object on the "__inactives" state, which the root state protoypally inherits from.  By doing this, views for inactive
+ * states are accessible through locals object's protoypal inheritance chain from any state in the system.
+ *
+ * ---Transitions---
+ * UI-Router Extras decorates the $state.transitionTo function.  The exit state and enter state
+ */
+
 var _StickyState; // internal reference to $stickyStateProvider
 var internalStates = {}; // Map { statename -> InternalStateObj } holds internal representation of all states
 var root, // Root state, internal representation
@@ -210,7 +256,6 @@ angular.module("ct.ui.router.extras").config(
                 savedFromStatePath = fromState.path;
 
                 var currentTransition = {toState: toState, toParams: toParams || {}, fromState: fromState, fromParams: fromParams || {}};
-//                console.log("Current transition: ", msg);
 
                 pendingTransitions.push(currentTransition);
                 pendingRestore = restore;
