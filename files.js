@@ -13,15 +13,17 @@ var files = {
     'src/stickyStateProvider.js',
     'src/stickyState.js',
     'src/futureState.js',
-    'src/previousState.js'
+    'src/previousState.js',
+    'src/noop.js'
   ],
   test: [
-    'test/deepStateRedirectSpec.js',
-    'test/futureStateSpec.js',
+//    'test/deepStateRedirectSpec.js',
+//    'test/futureStateSpec.js',
     'test/stickyStateSpec.js',
-    'test/previousStateSpec.js',
-    'src/fsfactories/ngload.js',
-    'src/fsfactories/iframe.js'
+//    'test/previousStateSpec.js',
+//    'src/fsfactories/ngload.js',
+//    'src/fsfactories/iframe.js',
+    'src/noop.js'
   ],
   testUtil: [ 'test/testUtil.js', 'bower_components/lodash/dist/lodash.js'],
   jquery: [  'bower_components/jquery/dist/jquery.js' ],
