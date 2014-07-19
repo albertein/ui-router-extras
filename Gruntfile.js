@@ -145,13 +145,14 @@ module.exports = function (grunt) {
           browsers: [ grunt.option('browser') || 'PhantomJS' ]
         },
         watch: {
-          configFile: 'test/conf/karma.conf.js',
+          configFile: 'test/conf/karma.dev.conf.js',
           browsers: [ grunt.option('browser') || 'PhantomJS' ],
           singleRun: false,
           autoWatch: true,
           autoWatchInterval: 1
         },
         debug: {
+          configFile: 'test/conf/karma.dev.conf.js',
           singleRun: false,
           background: false,
           browsers: [ grunt.option('browser') || 'Chrome' ]
