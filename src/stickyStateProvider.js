@@ -95,7 +95,7 @@ function $StickyStateProvider($stateProvider) {
 
       for (var i = 0; i < keys.length; i++) {
         var k = keys[i];
-        if (a[k] != b[k]) return false; // Not '===', values aren't necessarily normalized
+        if (a[k] != b[k] && a[k] !== undefined) return false; // Not '===', values aren't necessarily normalized
       }
       return true;
     }
