@@ -35,6 +35,8 @@
 
     $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
       function shouldRedirect() {
+        // Skip redirection if we're jumping from a child state to a parent
+        if (fromState.name.substring(0, toState.name.length) == toState.name) return false;
         var deepStateStatus = computeDeepStateStatus(toState);
         var substate = lastSubstate[toState.name];
         // We're changing directly to one of the redirect (tab) states and we have a last substate recorded 
